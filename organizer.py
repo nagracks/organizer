@@ -6,10 +6,8 @@ __date__      = "14-07-2016"
 __license__   = "GPL3"
 __copyright__ = "Copyright © 2016 nagracks"
 
-import argparse
-import collections
-import os
-import shutil
+import argparse,collections,os,shutil,re
+
 
 # Shortcut for os.path.join#
 joinp = os.path.join
@@ -27,6 +25,7 @@ def parse_args():
                         action='store',
                         help="directory you want to organize")
     args = parser.parse_args()
+    
     return args
     
 class Organizer(object):
@@ -43,14 +42,14 @@ class Organizer(object):
         """
         # Make defaultdict #
         filetypes = collections.defaultdict(list)
-
+        fileType=re.compile(r'(([a-zA-Z0-9._%+-]+)\.([a-z]+))')
         # Iterate over path #
-        for ele in os.listdir(self.path):
-            if os.path.isfile(joinp(self.path, ele)):
+        for fileName in os.listdir(self.path):
+            if os.path.isfile(joinp(self.path, fileName)):
                 # Get file-extension without dot #
-                file_ext = os.path.splitext(ele)[-1].split('.')[-1]
+                file_ext = fileType.search(fileName).group(3)
                 # Make dictionary pairs #
-                filetypes[file_ext].append(ele)
+                filetypes[file_ext].append(fileName)
 
         return filetypes
 
