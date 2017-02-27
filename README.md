@@ -44,4 +44,4 @@ LICENSE
 ------
 
 `Organizer` is licensed under 
-[GPL3](https://github.com/nagracks/organizer/blob/master/LICENSE)
+[MIT](https://github.com/nagracks/organizer/blob/master/LICENSE)
