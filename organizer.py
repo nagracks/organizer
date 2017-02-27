@@ -11,24 +11,7 @@ import collections
 import os
 import shutil
 
-# Shortcut for os.path.join#
-joinp = os.path.join
 
-def parse_args():
-    """Parse args with argparse
-    :returns: args
-
-    """
-    parser = argparse.ArgumentParser(description="Organizer")
-    parser.add_argument('-d',
-                        '--directory',
-                        dest='directory',
-                        metavar='/full/directory/path',
-                        action='store',
-                        help="directory you want to organize")
-    args = parser.parse_args()
-    return args
-    
 class Organizer(object):
     """Organizer"""
 
@@ -46,7 +29,7 @@ class Organizer(object):
 
         # Iterate over path #
         for ele in os.listdir(self.path):
-            if os.path.isfile(joinp(self.path, ele)):
+            if os.path.isfile(os.path.join(self.path, ele)):
                 # Get file-extension without dot #
                 file_ext = os.path.splitext(ele)[-1].split('.')[-1]
                 # Make dictionary pairs #
@@ -65,7 +48,7 @@ class Organizer(object):
         # Else make directories #
         # path is /home/user/Organizer/keys.. #
         for dir_name in self.filetype_dict().keys():
-            dir_path = joinp(self.home_dir, 'Organizer', dir_name)
+            dir_path = os.path.join(self.home_dir, 'Organizer', dir_name)
             if os.path.exists(dir_path):
                 pass
             else:
@@ -80,14 +63,26 @@ class Organizer(object):
             # Iterate over dictionary value #
             for files in v:
                 # Make source and destination paths #
-                src_path = joinp(self.path, files) 
-                dst_path = joinp(self.home_dir, 'Organizer', k)
+                src_path = os.path.join(self.path, files) 
+                dst_path = os.path.join(self.home_dir, 'Organizer', k)
                 # Move them #
                 shutil.move(src_path, dst_path)
 
+
 if __name__ == "__main__":
-    # Commandline args #
-    args = parse_args()
+    # Commandline args
+    parser = argparse.ArgumentParser(
+            description="Organizer"
+            )
+    parser.add_argument(
+            '-d',
+            '--directory',
+            dest='directory',
+            metavar='/full/directory/path',
+            action='store',
+            help="directory you want to organize"
+            )
+    args = parser.parse_args()
 
     org = Organizer(args.directory)
     org.make_dirs()
